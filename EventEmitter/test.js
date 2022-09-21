@@ -41,6 +41,19 @@ proto.on = function (eventName,listener){
 }
 
 /**
+ * 添加一次性事件
+ * @param  {String} eventName 事件名称
+ * @param  {Function} listener 监听器函数
+ * @return {Object} 可链式调用
+ */
+proto.once = function(eventName,listener) {
+    return this.on(eventName,{
+        listener,
+        once: true
+    })
+}
+
+/**
  * 删除事件
  * @param  {String} eventName 事件名称
  * @param  {Function} listener 监听器函数
@@ -55,10 +68,12 @@ proto.off = function(eventName,listener){
     let listeners = this.__events[eventName]
 
     listeners.map((item,index)=>{
-        if(item.listener === listener){
-            listeners.splice(index,1)
+        if(item && item.listener === listener){
+            listeners.splice(index,1,null)
         }
     })
+
+    return this
 }
 
 /**
@@ -72,11 +87,25 @@ proto.emit = function(eventName,args){
     if (!listeners) return;
 
     listeners.map((listener)=>{
-        listener.listener.apply(this, args || [])
-        if(listener.once){
-
+        if(listener){
+            listener.listener.apply(this, args || [])
+            if(listener.once){
+                this.off(eventName,listener.listener)
+            }
         }
     })
 
     return this
+}
+
+/**
+ * 删除某一个类型的所有事件或者所有事件
+ * @param  {String[]} eventName 事件名称
+ */
+proto.allOff = function(eventName) {
+    if(eventName && this.__events[eventName]){
+        this.__events[eventName] = []
+    }else{
+        this.__events = {}
+    }
 }

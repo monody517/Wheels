@@ -24,7 +24,7 @@
     }
 
     emitter.on("demo", handleOne)
-        .on("demo", handleSecond)
+        .once("demo", handleSecond)
         .on("demo", handleThird);
 
     emitter.emit('demo', [1, 2, 3]);
@@ -32,12 +32,12 @@
     // => 第二个监听函数 1 2 3
     // => 第三个监听函数 1 2 3
 
-    emitter.off('demo', handleThird);
-    emitter.emit('demo', [1, 2, 3]);
+    // emitter.off('demo', handleThird);
+    // emitter.emit('demo', [1, 2, 3]);
     // => 第一个监听函数 1 2 3
 
-    // emitter.allOff();
-    // emitter.emit('demo', [1, 2, 3]);
+    emitter.allOff();
+    emitter.emit('demo', [1, 2, 3]);
     // nothing
 </script>
 </body>
