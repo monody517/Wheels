@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>scroll</title>
+</head>
+
+<body>
+
+<div class="wrap">
+  <ul class="items"><!--
+    --><li class="item"><div>1</div></li><!--
+    --><li class="item"><div>2</div></li><!--
+    --><li class="item"><div>3</div></li><!--
+    --><li class="item"><div>4</div></li><!--
+    --><li class="item"><div>5</div></li><!--
+    --><li class="item"><div>6</div></li><!--
+  --></ul>
+</div>
+
+<script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="test.js"></script>
+
+</body>
+
+<style>
+    .items {
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    @media (max-width: 780px) {
+        .item {
+            width: 190px;
+        }
+    }
+
+    @media (max-width: 580px) {
+        .item {
+            width: 160px;
+        }
+    }
+</style>
+</html>
