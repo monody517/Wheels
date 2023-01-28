@@ -1,50 +1,29 @@
-/* 防抖：n秒后执行指定事件，若在n秒内重复触发，则重新计时 */
+var count = 1;
+var container = document.getElementById('container');
+
+function getUserAction() {
+    container.innerHTML = count++;
+};
+
+container.onmousemove = debounce(getUserAction,1000,true);
 
 
-// 简易版，缺点为不会立即执行，需要等待一个wait后才能执行
-function easyDebounce(fn,wait){
-    let timeout;
-
+function debounce(fn,wait,immediate) {
+    var timeout,result
+    
     return function () {
-        let context = this;
-        let args = arguments;
-
-        clearTimeout(timeout)
-
-        timeout = setTimeout(function (){
-            fn.apply(context,args)
-        },wait)
-    }
-}
-
-// 如需要立即执行，可加入第三个参数用于判断
-function debounce(func,wait,immediate){
-    let timeout
-
-    return function () {
-        let context = this;
-        let args = arguments;
-
-        if(timeout) return clearTimeout(timeout)
-
-        if(immediate){
-            let callNow = !timeout
-
-            timeout = setTimeout(function() {
+        var context = this;  // 返回的匿名函数实际由container调用
+        var args = arguments;  // 因此需要重新赋值this和参数，否则this指向window，参数为undefined
+        if (timeout) clearTimeout(timeout)
+        if (immediate) {
+            var callNow = !timeout
+            timeout = setTimeout(function () {  // 到达wait时间将timeout置为null，否则timeout一直存在
                 timeout = null
-            },wait)
-            if(callNow){
-                func.apply(context,args)
-            }
-        }else{
-            timeout = setTimeout(function (){
-                func.apply(context,args)
-            },wait)
+            }, wait)
+            if(callNow) result = fn.apply(context,args)
+        } else {
+            timeout = setTimeout(fn.apply(context,args),wait)
         }
+        return result
     }
 }
-
-function log() {
-    console.log('1111')
-}
-
